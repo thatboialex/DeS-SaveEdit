@@ -1,0 +1,29 @@
+name: Build DeS-SaveEdit
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v5
+
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v2
+
+    - name: Build
+      run: msbuild DeSaveEdit.sln /p:Configuration=Release /p:Platform=x86
+
+    - name: Upload EXE
+      uses: actions/upload-artifact@v4
+      with:
+        name: DeS-SaveEdit-PS5
+        path: bin\Release\DeS-SaveEdit.exe
